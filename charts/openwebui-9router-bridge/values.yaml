@@ -1,0 +1,111 @@
+# Default values for openwebui-9router-bridge.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/your-org/openwebui-9router-bridge
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+
+# Application bridge configuration
+bridge:
+  host: "0.0.0.0"
+  port: 8000
+  logLevel: "INFO"
+  # Target 9Router URL
+  ninerouterUrl: "http://ninerouter.default.svc.cluster.local:20128"
+  # Search provider / model in 9Router (e.g. tavily, brave, searxng)
+  searchModel: "tavily"
+  timeoutSeconds: 15.0
+  maxRetries: 2
+
+  # Security tokens
+  inboundApiKey: ""      # If set, Open WebUI must provide Bearer token
+  ninerouterApiKey: ""   # If set, bridge sends Bearer token to 9Router
+  existingSecret: ""     # Name of an existing secret with keys: INBOUND_API_KEY, NINEROUTER_API_KEY
+
+extraEnv: []
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: search-bridge.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

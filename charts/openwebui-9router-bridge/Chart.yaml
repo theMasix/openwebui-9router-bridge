@@ -1,0 +1,15 @@
+apiVersion: v2
+name: openwebui-9router-bridge
+description: Production-ready translation bridge connecting Open WebUI external search protocol to 9Router search API
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - openwebui
+  - 9router
+  - search
+  - ai
+home: https://github.com/your-org/openwebui-9router-bridge
+maintainers:
+  - name: Masih
+    email: masih@example.com

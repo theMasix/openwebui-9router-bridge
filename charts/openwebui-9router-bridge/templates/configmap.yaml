@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "openwebui-9router-bridge.fullname" . }}-config
+  labels:
+    {{- include "openwebui-9router-bridge.labels" . | nindent 4 }}
+data:
+  BRIDGE_HOST: {{ .Values.bridge.host | quote }}
+  BRIDGE_PORT: {{ .Values.bridge.port | quote }}
+  BRIDGE_LOG_LEVEL: {{ .Values.bridge.logLevel | quote }}
+  BRIDGE_NINEROUTER_URL: {{ .Values.bridge.ninerouterUrl | quote }}
+  BRIDGE_SEARCH_MODEL: {{ .Values.bridge.searchModel | quote }}
+  BRIDGE_TIMEOUT_SECONDS: {{ .Values.bridge.timeoutSeconds | quote }}
+  BRIDGE_MAX_RETRIES: {{ .Values.bridge.maxRetries | quote }}
