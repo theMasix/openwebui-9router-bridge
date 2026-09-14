@@ -1,0 +1,50 @@
+[project]
+name = "openwebui-9router-bridge"
+version = "0.1.0"
+description = "Production-ready translation bridge connecting Open WebUI external search protocol to 9Router search API"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [
+    { name = "Masih", email = "masih@example.com" }
+]
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "httpx[socks]>=0.27.0",
+    "pydantic>=2.8.0",
+    "pydantic-settings>=2.4.0",
+    "structlog>=24.4.0",
+]
+
+[project.scripts]
+openwebui-9router-bridge = "bridge.main:run"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "respx>=0.21.0",
+    "ruff>=0.6.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "bridge"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "A", "C4", "SIM"]
+ignore = ["E501"]
